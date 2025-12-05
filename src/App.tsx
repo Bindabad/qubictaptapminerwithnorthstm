@@ -7,6 +7,7 @@ import LaunchpadStaking from './components/LaunchpadStaking';
 import ReferralSystem from './components/ReferralSystem';
 import DeFiPlatform from './components/DeFiPlatform';
 import FlowGuide from './components/FlowGuide';
+import WelcomeVideo from './components/WelcomeVideo';
 import { authService, AuthUser } from './services/authService';
 import { walletService } from './services/walletService';
 
@@ -17,6 +18,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [currentView, setCurrentView] = useState<ViewType>('tap');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -37,6 +39,10 @@ function App() {
       const currentUser = await authService.getCurrentUser();
       setUser(currentUser);
       if (currentUser) {
+        const hasSeenVideo = localStorage.getItem('hasSeenWelcomeVideo');
+        if (!hasSeenVideo) {
+          setShowVideo(true);
+        }
         await loadUserData();
       }
     } catch (error) {
@@ -44,6 +50,11 @@ function App() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCloseVideo = () => {
+    setShowVideo(false);
+    localStorage.setItem('hasSeenWelcomeVideo', 'true');
   };
 
   const loadUserData = async () => {
@@ -100,6 +111,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white">
+      {showVideo && <WelcomeVideo onClose={handleCloseVideo} />}
       <nav className="bg-black border-b-2 border-qubic-cyan sticky top-0 z-50 shadow-lg">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
