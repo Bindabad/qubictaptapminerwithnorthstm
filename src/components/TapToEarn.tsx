@@ -7,6 +7,8 @@ interface TapToEarnProps {
   userId: string;
   currentPoints: number;
   onPointsUpdate: () => void;
+  onNavigateToStaking?: () => void;
+  onNavigateToDeFi?: () => void;
 }
 
 interface PowerBoost {
@@ -15,7 +17,7 @@ interface PowerBoost {
   source: string;
 }
 
-export default function TapToEarn({ userId, currentPoints, onPointsUpdate }: TapToEarnProps) {
+export default function TapToEarn({ userId, currentPoints, onPointsUpdate, onNavigateToStaking, onNavigateToDeFi }: TapToEarnProps) {
   const [points, setPoints] = useState(currentPoints);
   const [tapAnimation, setTapAnimation] = useState<{ x: number; y: number; id: number } | null>(null);
   const [powerBoosts, setPowerBoosts] = useState<PowerBoost[]>([]);
@@ -171,13 +173,13 @@ export default function TapToEarn({ userId, currentPoints, onPointsUpdate }: Tap
             <h3 className="text-xl font-bold text-black mb-3 text-center">Congratulations! 🎉</h3>
             <p className="text-center text-black font-bold mb-4">You've mined {points.toFixed(0)} QUBIC!</p>
             <div className="grid grid-cols-3 gap-3">
-              <button className="bg-black hover:bg-gray-900 text-qubic-cyan font-bold py-3 px-4 rounded-xl transition-all border-2 border-qubic-cyan text-sm">
+              <button onClick={onNavigateToStaking} className="bg-black hover:bg-gray-900 text-qubic-cyan font-bold py-3 px-4 rounded-xl transition-all border-2 border-qubic-cyan text-sm">
                 💰 Stake
               </button>
-              <button className="bg-black hover:bg-gray-900 text-qubic-cyan font-bold py-3 px-4 rounded-xl transition-all border-2 border-qubic-cyan text-sm">
+              <button onClick={onNavigateToDeFi} className="bg-black hover:bg-gray-900 text-qubic-cyan font-bold py-3 px-4 rounded-xl transition-all border-2 border-qubic-cyan text-sm">
                 🔄 Swap
               </button>
-              <button className="bg-black hover:bg-gray-900 text-qubic-cyan font-bold py-3 px-4 rounded-xl transition-all border-2 border-qubic-cyan text-sm">
+              <button onClick={onNavigateToDeFi} className="bg-black hover:bg-gray-900 text-qubic-cyan font-bold py-3 px-4 rounded-xl transition-all border-2 border-qubic-cyan text-sm">
                 📤 Withdraw
               </button>
             </div>

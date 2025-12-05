@@ -150,6 +150,8 @@ function App() {
               userId={user.id}
               currentPoints={user.points_balance || 0}
               onPointsUpdate={handleBalanceUpdate}
+              onNavigateToStaking={() => setCurrentView('launchpad')}
+              onNavigateToDeFi={() => setCurrentView('defi')}
             />
           )}
 
