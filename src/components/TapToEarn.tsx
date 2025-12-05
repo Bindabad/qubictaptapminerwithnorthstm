@@ -125,11 +125,10 @@ export default function TapToEarn({ userId, currentPoints, onPointsUpdate }: Tap
         <div className="text-center mb-6">
           <h1 className="text-4xl md:text-5xl font-bold text-black mb-2 flex items-center justify-center gap-3">
             <Cpu className="w-10 h-10 text-qubic-cyan" />
-            Qubic Tap Tap Miner
+            QUBIC TAP TAP MINER
           </h1>
           <p className="text-gray-600 font-medium text-lg">
-            A complete ecosystem for Qubic mining, swapping, and gifting with Northstm Launchpad{' '}
-            <span className="text-xs text-gray-400">(simulation)</span>
+            First QUBIC Blockchain Mining Game - Mine 1000 QUBIC per tap!
           </p>
         </div>
 
@@ -261,8 +260,8 @@ export default function TapToEarn({ userId, currentPoints, onPointsUpdate }: Tap
 
       <div className="bg-black rounded-xl p-6 border-2 border-qubic-cyan text-center mb-6">
         <p className="text-white font-medium leading-relaxed">
-          <span className="font-bold text-qubic-cyan">TAP TO MINE:</span> Each tap simulates a hash computation.
-          Boost your mining power with gift cards and unlock real profit-sharing rewards!
+          <span className="font-bold text-qubic-cyan">TAP TO MINE 1000 QUBIC:</span> Stake, swap or withdraw on demand.
+          Swap to any token via DeFi using MetaMask. P2P trade and send to community members via Northstm Launchpad!
         </p>
       </div>
 

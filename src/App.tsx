@@ -108,8 +108,8 @@ function App() {
                 <span className="text-xl font-bold text-black">Q</span>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white">Qubic Tap Tap Miner</h1>
-                <p className="text-xs text-qubic-cyan">Powered by Northstm Launchpad</p>
+                <h1 className="text-xl font-bold text-white">QUBIC TAP TAP MINER</h1>
+                <p className="text-xs text-qubic-cyan">Northstm Launchpad Protocol</p>
               </div>
             </div>
 

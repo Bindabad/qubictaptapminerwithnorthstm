@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Wallet, TrendingUp, Droplet, Repeat, PieChart, ArrowDownUp, Zap } from 'lucide-react';
+import { Wallet, TrendingUp, Droplet, Repeat, PieChart, ArrowDownUp, Zap, Send } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import InfoBox from './InfoBox';
 
@@ -10,7 +10,7 @@ interface DeFiPlatformProps {
   onNavigateToStaking?: () => void;
 }
 
-type DeFiView = 'swap' | 'liquidity' | 'yield' | 'lending' | 'withdraw';
+type DeFiView = 'swap' | 'liquidity' | 'yield' | 'lending' | 'withdraw' | 'p2p';
 
 declare global {
   interface Window {
@@ -29,6 +29,9 @@ export default function DeFiPlatform({ userId, qubicBalance, onBalanceUpdate, on
   const [metaMaskBalance, setMetaMaskBalance] = useState<string>('0');
   const [withdrawAddress, setWithdrawAddress] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [p2pRecipient, setP2pRecipient] = useState('');
+  const [p2pAmount, setP2pAmount] = useState('');
+  const [p2pNote, setP2pNote] = useState('');
 
   useEffect(() => {
     if (window.ethereum) {
@@ -291,6 +294,7 @@ export default function DeFiPlatform({ userId, qubicBalance, onBalanceUpdate, on
 
         <div className="grid grid-cols-2 md:flex md:flex-wrap gap-2 md:gap-3 mb-6 md:mb-8">
           <ViewButton view="swap" icon={ArrowDownUp} label="Swap" />
+          <ViewButton view="p2p" icon={Send} label="P2P Send" />
           <ViewButton view="liquidity" icon={Droplet} label="Liquidity" />
           <ViewButton view="yield" icon={TrendingUp} label="Yield" />
           <ViewButton view="lending" icon={PieChart} label="Lending" />
@@ -601,6 +605,119 @@ export default function DeFiPlatform({ userId, qubicBalance, onBalanceUpdate, on
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeView === 'p2p' && (
+          <div className="space-y-4">
+            <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+              <div className="flex items-center gap-3 mb-4">
+                <Send className="w-6 h-6 text-blue-400" />
+                <h3 className="text-xl font-bold text-white">P2P Send & Trade</h3>
+              </div>
+              <p className="text-slate-400 mb-6">Send QUBIC to community members - Powered by Northstm Launchpad Protocol</p>
+
+              <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg p-4 border border-blue-500/30 mb-6">
+                <p className="text-sm text-white">
+                  <span className="font-bold text-blue-400">Community Payback:</span> Transfer QUBIC directly to peers in the Northstm ecosystem
+                </p>
+              </div>
+
+              <div className="bg-slate-900 rounded-lg p-6 border border-slate-700 mb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-slate-400">Your Balance</span>
+                  <span className="text-2xl font-bold text-white">{qubicBalance.toFixed(2)} QUBIC</span>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-2">Recipient Email or User ID</label>
+                  <input
+                    type="text"
+                    value={p2pRecipient}
+                    onChange={(e) => setP2pRecipient(e.target.value)}
+                    placeholder="user@example.com or user ID"
+                    className="w-full bg-slate-900 text-white px-4 py-3 rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-2">Amount (QUBIC)</label>
+                  <input
+                    type="number"
+                    value={p2pAmount}
+                    onChange={(e) => setP2pAmount(e.target.value)}
+                    placeholder="0.0"
+                    className="w-full bg-slate-900 text-white px-4 py-3 rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                  />
+                  <p className="text-xs text-slate-500 mt-2">Min: 10 QUBIC • No Fee</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-2">Note (Optional)</label>
+                  <input
+                    type="text"
+                    value={p2pNote}
+                    onChange={(e) => setP2pNote(e.target.value)}
+                    placeholder="Add a note to your transfer"
+                    className="w-full bg-slate-900 text-white px-4 py-3 rounded-lg border border-slate-700 focus:border-blue-500 focus:outline-none"
+                  />
+                </div>
+
+                <button
+                  onClick={async () => {
+                    if (!p2pRecipient || !p2pAmount) {
+                      alert('Please enter recipient and amount');
+                      return;
+                    }
+
+                    const amount = parseFloat(p2pAmount);
+                    if (amount < 10) {
+                      alert('Minimum send amount is 10 QUBIC');
+                      return;
+                    }
+
+                    if (amount > qubicBalance) {
+                      alert('Insufficient balance');
+                      return;
+                    }
+
+                    setLoading(true);
+                    try {
+                      await supabase.from('transactions').insert({
+                        user_id: userId,
+                        type: 'p2p_send',
+                        amount: -amount,
+                        description: `P2P Send: ${amount} QUBIC to ${p2pRecipient}${p2pNote ? ` - ${p2pNote}` : ''}`,
+                        balance_after: qubicBalance - amount
+                      });
+
+                      await supabase.rpc('update_user_balance', {
+                        p_user_id: userId,
+                        p_qubic_delta: -amount
+                      });
+
+                      alert(`Successfully sent ${amount} QUBIC to ${p2pRecipient}!`);
+                      setP2pRecipient('');
+                      setP2pAmount('');
+                      setP2pNote('');
+                      onBalanceUpdate();
+                    } catch (error) {
+                      console.error('P2P send error:', error);
+                      alert('Transfer failed. Please try again.');
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                  disabled={loading || qubicBalance < 10}
+                  className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  <Send className="w-5 h-5" />
+                  {loading ? 'Sending...' : 'Send QUBIC'}
+                </button>
               </div>
             </div>
           </div>

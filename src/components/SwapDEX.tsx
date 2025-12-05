@@ -114,7 +114,7 @@ export default function SwapDEX({ userId, qubicBalance, onBalanceUpdate }: SwapD
             <TrendingUp className="w-10 h-10 text-qubic-cyan" />
             Qubic Swap DEX
           </h1>
-          <p className="text-gray-600 font-medium text-lg">Decentralized exchange</p>
+          <p className="text-gray-600 font-medium text-lg">Swap to any token via DeFi - MetaMask Compatible</p>
         </div>
 
         <div className="bg-qubic-cyan/5 rounded-xl p-5 border-2 border-qubic-cyan mb-6">
