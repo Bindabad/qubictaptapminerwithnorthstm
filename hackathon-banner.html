@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackathon Banner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .banner-container {
+            width: 100%;
+            max-width: 1400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border-radius: 24px;
+            padding: 80px 60px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(102, 126, 234, 0.3);
+        }
+
+        .banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .banner::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(30px, -30px) rotate(10deg); }
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 50px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 72px;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #fff, #a8edea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 40px;
+            max-width: 700px;
+            line-height: 1.5;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 28px;
+            color: white;
+            font-weight: 700;
+        }
+
+        .cta-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: rise linear infinite;
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-1000px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .banner {
+                padding: 50px 30px;
+            }
+
+            h1 {
+                font-size: 42px;
+            }
+
+            .subtitle {
+                font-size: 18px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .cta-container {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner-container">
+        <div class="banner">
+            <div class="particles" id="particles"></div>
+
+            <div class="content">
+                <div class="badge">2025 Innovation Challenge</div>
+
+                <h1>
+                    Build The <span class="highlight">Future</span><br>
+                    At Our Hackathon
+                </h1>
+
+                <p class="subtitle">
+                    Join developers, designers, and innovators for 48 hours of coding, creativity, and collaboration. Build groundbreaking projects and compete for amazing prizes.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Date</div>
+                        <div class="info-value">Dec 15-17</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Prize Pool</div>
+                        <div class="info-value">$50,000</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Participants</div>
+                        <div class="info-value">500+</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Duration</div>
+                        <div class="info-value">48 Hours</div>
+                    </div>
+                </div>
+
+                <div class="cta-container">
+                    <a href="#" class="btn btn-primary">
+                        <span>Register Now</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <a href="#" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const particlesContainer = document.getElementById('particles');
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+
+            const size = Math.random() * 4 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+
+            particlesContainer.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 7000);
+        }
+
+        setInterval(createParticle, 300);
+
+        for (let i = 0; i < 15; i++) {
+            setTimeout(createParticle, i * 200);
+        }
+    </script>
+</body>
+</html>
